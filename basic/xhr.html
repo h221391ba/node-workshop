@@ -42,9 +42,9 @@
             var xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 if (this.status === 200) {
-                    response.innerHTML = `同步請求的response: ${this.responseText}`;
+                    response.innerHTML = `異步請求的response: ${this.responseText}`;
                 } else {
-                    response.innerHTML = `同步請求錯誤: ${this.responseText}`;
+                    response.innerHTML = `異步請求錯誤: ${this.responseText}`;
                 }
             };
 
