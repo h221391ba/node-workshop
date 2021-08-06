@@ -5,11 +5,9 @@ let doWork = function (job, timer, isOK) {
         setTimeout(() => {
             let dt = new Date();
             if (isOK) {
-                console.log(`完成工作: ${job} at ${dt.toISOString()}`);
-                resolve();
+                resolve(`完成工作: ${job} at ${dt.toISOString()}`);
             } else {
-                console.log(`失敗了 ${job}`);
-                reject();
+                reject(`失敗了 ${job}`);
             }
         }, timer);
     });
@@ -20,12 +18,15 @@ let job1 = doWork("刷牙", 3000, true);
 
 job1
     .then((result) => {
-        console.log('job1 finished');
+        console.log('job1 finished', result);
         return doWork('划手機', 5000, true);
     })
     .then((result) => {
-        console.log('job2 finished');
+        console.log('job2 finished', result);
         return doWork('玩遊戲', 8000, true);
+    })
+    .then((result) => {
+        console.log('job3 finished', result);
     })
     .catch((error) => {
         console.log(error);
