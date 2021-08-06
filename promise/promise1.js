@@ -1,6 +1,6 @@
 //作業三
 // 模擬一個非同步工作
-function doWork (job, timer, isOK) {
+function doWork(job, timer, isOK) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             let dt = new Date();
@@ -13,8 +13,12 @@ function doWork (job, timer, isOK) {
     });
 };
 
-let work = async ()=>{
-    console.log(await doWork("刷牙", 3000, true),'\n',await doWork("吃飯", 3000, true),'\n',await doWork("洗澡", 3000, true));
+let work = async () => {
+    console.log(
+        await doWork("刷牙", 3000, true), '\n',
+        await doWork("吃飯", 3000, true), '\n',
+        await doWork("洗澡", 3000, true)
+    );
 }
 work();
 
