@@ -1,0 +1,41 @@
+<html lang="en">
+
+<head>
+    <title>希望不要掉水溝</title>
+</head>
+
+<body>
+    <h3>希望不要掉水溝!!</h3>
+    <button id="asyncBtn">出門</button>
+    <div id="response">在家Play game</div>
+
+    <script>
+        var response = document.getElementById("response");
+
+        let dodo = () => {
+            return new Promise((resolve, reject) => {
+                response.innerHTML = '出門中...';
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        resolve(`回家: ${this.responseText}`);
+                    } else {
+                        response.innerHTML = `掉下水溝: ${this.responseText}`;
+                        reject(`掉下水溝: ${this.responseText}`);
+                    }
+                };
+                xhr.open("GET", "http://18.237.113.31:3000/", true);
+                xhr.send();
+            });
+        }
+
+        var asyncBtn = document.getElementById("asyncBtn");
+        asyncBtn.addEventListener("click", async function aaa() {
+            console.log('send')
+            response.innerHTML = await dodo()
+            console.log('accept')
+        });
+    </script>
+</body>
+
+</html>
