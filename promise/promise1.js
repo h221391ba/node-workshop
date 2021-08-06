@@ -1,3 +1,4 @@
+//作業一
 // 模擬一個非同步工作
 let doWork = function (job, timer, isOK) {
     return new Promise((resolve, reject) => {
@@ -14,3 +15,4 @@ let doWork = function (job, timer, isOK) {
 
 let job1 = doWork("刷牙", 3000, true);
 console.log(job1);
+
