@@ -12,3 +12,8 @@ async function asyncF() {
   console.log(4);
   asyncF();
   console.log(5);
+
+  /**
+   *  4 1 5 2 3 
+   * 因為async function中，需要等待Promise結束而async function之外不受限制，會繼續被執行，等Promise結束後才會執行await以後的程式。
+   */
