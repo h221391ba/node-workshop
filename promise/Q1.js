@@ -17,6 +17,6 @@ function syncF() {
    * 4 1 3 5 2
    * 
    * line 12 先做 --> 
-   * line 13 呼叫函式，執行setTimeout，由於異步特性所以裡面的東西給底層therad做，並不會等待裡面的function做完，因此接續 line 9，syncF()結束 -> 
+   * line 13 呼叫函式，執行setTimeout，由於異步特性所以裡面的東西給底層thread做，並不會等待裡面的function做完，因此接續 line 9，syncF()結束 -> 
    * line 14 console.log
    *  */ 
