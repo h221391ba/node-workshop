@@ -1,43 +1,11 @@
 const axios = require('axios');
 const moment = require('moment');
-const fs = require("fs");
+const fs = require('fs/promises');
 const file = 'stock.txt';
-const mysql = require('mysql');
+// const mysql = require('mysql2');
+
 
 require('dotenv').config()
-
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-});
-
-connection.connect((err) => {
-    if (err) console.error("資料庫連不上");
-});
-
-// 從檔案中取得股票代碼
-let getStockCode = () => {
-    return new Promise((res, rej) => {
-        fs.readFile(file, 'utf8', (err, stockCode) => {
-            (err) ? rej(err) : res(stockCode);
-        })
-    })
-};
-
-// 取得股票代碼在資料庫中的筆數
-let queryStockCode = (stockCode) => {
-    return new Promise((res, rej) => {
-        connection.query(
-            'SELECT * FROM stock WHERE stock_id = ?',
-            [stockCode],
-            (err, results) => {
-                (err) ? rej(err) : res(results);
-            });
-    })
-}
 
 //取得股票資訊
 let axiosGetStockInfo = (stockCode) => {
@@ -75,15 +43,40 @@ let insertStockData = (parsedData) => {
 }
 
 (async () => {
+    const mysql = require('mysql2/promise');
+    const connection = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+    });
     try {
-        let stockCode = await getStockCode();
-        let queryStockCodeResult = await queryStockCode(stockCode);
-        if (queryStockCodeResult.length === 0) throw ('此股票代碼不在服務範圍內');
+        connection.connect((err) => {
+            if (err) console.error("資料庫連不上");
+        });
+
+        let stockCode = await fs.readFile(file, 'utf8');
+        const [queryStockCode] = await connection.execute(
+            'SELECT * FROM stock WHERE stock_id = ?',
+            [stockCode]
+        );
+
+        if (queryStockCode.length === 0) throw ('此股票代碼不在服務範圍內');
         let stockInfo = await axiosGetStockInfo(stockCode);
         stockInfo = stockInfo.data.data;
         if (stockInfo.length === 0) throw ('從證交所查到的資料有問題');
         let newStockInfo = parsedStockInfo(stockInfo, stockCode);
-        let insertResult = await insertStockData(newStockInfo);
+        console.log(newStockInfo);
+
+
+
+        // 無法
+        const [insertResult] = await connection.execute(
+            'INSERT IGNORE INTO stock_price (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?',
+            [[...newStockInfo]],
+        );
+
         console.info(insertResult);
     } catch (err) {
         console.log('-----------------------------');
