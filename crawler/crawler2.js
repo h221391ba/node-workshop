@@ -35,8 +35,6 @@ let homework = async () => {
     } catch (err) { 
         console.log(err);
     }
-
 }
 
 homework();
-
