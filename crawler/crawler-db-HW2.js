@@ -37,10 +37,6 @@ let parsedStockInfo = (stockInfo, stockCode) => {
         database: process.env.DB_NAME,
     });
     try {
-        connection.connect((err) => {
-            if (err) console.error("資料庫連不上");
-        });
-
         let stockCode = await fs.readFile(file, 'utf8');
         const [queryStockCode] = await connection.execute(
             'SELECT * FROM stock WHERE stock_id = ?',
