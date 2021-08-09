@@ -29,7 +29,6 @@ let parsedStockInfo = (stockInfo, stockCode) => {
 }
 
 (async () => {
-    const mysql = require('mysql2/promise');
     const connection = await mysql.createConnection({
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
