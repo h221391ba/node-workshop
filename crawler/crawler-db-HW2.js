@@ -2,9 +2,6 @@ const axios = require('axios');
 const moment = require('moment');
 const fs = require('fs/promises');
 const file = 'stock.txt';
-// const mysql = require('mysql2');
-
-
 require('dotenv').config()
 
 //取得股票資訊
@@ -27,18 +24,6 @@ let parsedStockInfo = (stockInfo, stockCode) => {
         item[0] = parseInt(item[0].replace(/\//g, ""), 10) + 19110000;
         item.unshift(stockCode);
         return item;
-    })
-}
-
-// 將整理好的資料寫入資料庫
-let insertStockData = (parsedData) => {
-    return new Promise((res, rej) => {
-        connection.query(
-            'INSERT IGNORE INTO stock_price (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?',
-            [parsedData],
-            (err, results) => {
-                (err) ? rej(err) : res(results);
-            });
     })
 }
 
@@ -67,14 +52,10 @@ let insertStockData = (parsedData) => {
         stockInfo = stockInfo.data.data;
         if (stockInfo.length === 0) throw ('從證交所查到的資料有問題');
         let newStockInfo = parsedStockInfo(stockInfo, stockCode);
-        console.log(newStockInfo);
-
-
-
-        // 無法
-        const [insertResult] = await connection.execute(
+        
+        const [insertResult] = await connection.query(
             'INSERT IGNORE INTO stock_price (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?',
-            [[...newStockInfo]],
+            [newStockInfo],
         );
 
         console.info(insertResult);
