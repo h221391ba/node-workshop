@@ -2,6 +2,7 @@ const axios = require('axios');
 const moment = require('moment');
 const fs = require('fs/promises');
 const file = 'stock.txt';
+const mysql = require('mysql2/promise');
 require('dotenv').config()
 
 //取得股票資訊
