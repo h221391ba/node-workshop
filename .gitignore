@@ -1,5 +1,6 @@
 crawler/node_modules
 simple-express/node_modules
+simple-express/.env
 crawler/.env
 node_modules
 .vscode
